@@ -5,14 +5,16 @@ var mongoose = require("mongoose");
 var unirest = require("unirest");
 
 var app = express();
+var PORT = process.env.PORT || 8080;
+
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
+app.listen(PORT);
+
 
 var uriString = process.env.MONGODB_URI ||
 				process.env.MONGOHQ_URL ||
 				'mongodb://localhost/wildcat';
-
-var PORT = process.env.PORT || 5000;
 
 var MASHAPE_KEY = "";
 
