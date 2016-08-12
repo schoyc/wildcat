@@ -68,10 +68,10 @@ function getFullTextArticle(articleUrl, articleTitle) {
 function storeArticle(response, articleUrl, articleTitle) {
 	var article = new Article({
 		title: articleTitle,
-		date: response.date;
+		date: response.date,
 		source: "",
 		link: articleUrl,
-		text: response.content;
+		text: response.content
 	});
 }
 
