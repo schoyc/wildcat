@@ -8,7 +8,7 @@ var app = express();
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
 
-var uriString = process.env.MONGOLAB_URI ||
+var uriString = process.env.MONGODB_URI ||
 				process.env.MONGOHQ_URL ||
 				'mongodb://localhost/wildcat';
 
