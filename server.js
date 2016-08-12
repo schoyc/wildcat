@@ -24,7 +24,7 @@ mongoose.connect(uriString, function(err, res) {
 	}
 });
 
-var articleSchema = new Schema({
+var articleSchema = new mongoose.Schema({
 	title : String,
 	date : {type: Date, default: Date.now},
 	link : String,
