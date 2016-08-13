@@ -104,12 +104,15 @@ app.post("/notifications", function(req, res) {
 		});
 	}
 
+	res.status(200).json({"message" : "SUCCESS!"});
+
 });
 
 app.get("/notifications", function(req, res) {
 	var query = req.query;
 	var challenge = query["hub.challenge"];
 	if (challenge) {
+		console.log("SUCCESSFULLY VERIFIED INTENT");
 		res.status(200).send(challenge);
 	} else {
 		console.log("Verification of intent error: " + query);
