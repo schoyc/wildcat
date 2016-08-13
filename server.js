@@ -79,9 +79,9 @@ function storeArticle(response, articleUrl, articleTitle) {
 
 app.post("/notifications", function(req, res) {
 	var entries = req.body.items;
-	var length = entries.length;
-	if (!entries) {
-		length = 0;
+	var length = 0;
+	if (entries) {
+		length = entries.length;
 	}
 	console.log(req.body);
 	for (var i = 0; i < length; i += 1) {
