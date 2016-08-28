@@ -16,7 +16,7 @@ var uriString = process.env.MONGODB_URI ||
 				process.env.MONGOHQ_URL ||
 				'mongodb://localhost/wildcat';
 
-var MASHAPE_KEY = "";
+var MASHAPE_KEY = "5f0umGZ1s9mshbQfNRJp8UzfKSxfp1AAu5Ijsnc2tkb30FjfdT";
 
 mongoose.connect(uriString, function(err, res) {
 	if (err) {
@@ -25,6 +25,8 @@ mongoose.connect(uriString, function(err, res) {
 		console.log('Succeeded connecting to: ' + uriString);
 	}
 });
+
+console.log("App is running.");
 
 var articleSchema = new mongoose.Schema({
 	title : String,
@@ -40,7 +42,7 @@ function handleError(res, reason, message, code) {
 	res.status(code || 500).json({"error": message});
 }
 
-function getFullTextArticle(articleUrl, articleTitle) {
+function getFullTextArticle(articleUrl, articleOptions) {
 	var fullTextUrl = "https://full-text-rss.p.mashape.com/extract.php";
 	var fullTextHeaders = {
 		"X-Mashape-Key": MASHAPE_KEY,
@@ -62,19 +64,22 @@ function getFullTextArticle(articleUrl, articleTitle) {
 				if (res.error) {
 					console.log(res.error);
 				} else {
-					storeArticle(response, articleUrl, articleTitle);
+					storeArticle(response, articleOptions);
 				}
 	});
 }
 
-function storeArticle(response, articleUrl, articleTitle) {
-	var article = new Article({
-		title: articleTitle,
-		date: response.date,
-		source: "",
-		link: articleUrl,
-		text: response.content
-	});
+function storeArticle(response, articleOptions) {
+	articleOptions.content = response.content;
+	var article = new Article(articleOptions);
+	console.log(articleOptions);
+
+	article.save(function (err) {
+			if (err) {
+				console.log('Error on saving article: ' + err);
+
+			}
+		});
 }
 
 app.post("/notifications", function(req, res) {
@@ -91,21 +96,13 @@ app.post("/notifications", function(req, res) {
 		var url = entry.permalinkUrl;
 		var articleTitle = entry.title;
 		var articleDate = new Date(entry.published * 1000);
-		var articleContent = entry.content;
-
-		var article = new Article({
+		var articleOptions = {
 			title: articleTitle,
 			date: articleDate,
-			source: url,
-			content: articleContent
-		});
+			link: url,
+		};
 
-		article.save(function (err) {
-			if (err) {
-				console.log('Error on saving article: ' + err);
-
-			}
-		});
+		getFullTextArticle(url, articleOptions);
 	}
 
 	res.status(200).json({"message" : "SUCCESS!"});
