@@ -64,13 +64,13 @@ function getFullTextArticle(articleUrl, articleOptions) {
 				if (res.error) {
 					console.log(res.error);
 				} else {
-					storeArticle(res, articleOptions);
+					storeArticle(res.body, articleOptions);
 				}
 	});
 }
 
-function storeArticle(response, articleOptions) {
-	articleOptions.content = response.content;
+function storeArticle(body, articleOptions) {
+	articleOptions.content = body.content;
 	var article = new Article(articleOptions);
 	console.log(articleOptions);
 
