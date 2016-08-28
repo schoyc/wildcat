@@ -60,11 +60,11 @@ function getFullTextArticle(articleUrl, articleOptions) {
 	unirest.post(fullTextUrl)
 			.headers(fullTextHeaders)
 			.send(fullTextBody)
-			.end(function (response) {
+			.end(function (res) {
 				if (res.error) {
 					console.log(res.error);
 				} else {
-					storeArticle(response, articleOptions);
+					storeArticle(res, articleOptions);
 				}
 	});
 }
